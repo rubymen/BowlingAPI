@@ -1,0 +1,389 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="bowlingModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="game">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Lane_id" Type="int" />
+          <Property Name="State" Type="enum" />
+          <Property Name="Created_at" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="lane">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="State" Type="enum" />
+        </EntityType>
+        <EntityType Name="player">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Game_id" Type="int" />
+          <Property Name="Pseudo" Type="varchar" MaxLength="255" />
+          <Property Name="Password" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="staff">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Pseudo" Type="varchar" MaxLength="255" />
+          <Property Name="Password" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="throw">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Turn_id" Type="int" />
+          <Property Name="Fallen_skittles" Type="int" />
+          <Property Name="number" Type="int" />
+        </EntityType>
+        <EntityType Name="turn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Player_id" Type="int" />
+          <Property Name="Game_id" Type="int" />
+          <Property Name="Created_at" Type="datetime" Precision="0" />
+          <Property Name="Score" Type="int" />
+        </EntityType>
+        <Association Name="game_ibfk_1">
+          <End Role="lane" Type="Self.lane" Multiplicity="0..1" />
+          <End Role="game" Type="Self.game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lane">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="game">
+              <PropertyRef Name="Lane_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="player_ibfk_1">
+          <End Role="game" Type="Self.game" Multiplicity="0..1" />
+          <End Role="player" Type="Self.player" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="game">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="player">
+              <PropertyRef Name="Game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="throw_ibfk_1">
+          <End Role="turn" Type="Self.turn" Multiplicity="0..1" />
+          <End Role="throw" Type="Self.throw" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="turn">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="throw">
+              <PropertyRef Name="Turn_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="turn_ibfk_1">
+          <End Role="player" Type="Self.player" Multiplicity="0..1" />
+          <End Role="turn" Type="Self.turn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="player">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="turn">
+              <PropertyRef Name="Player_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="turn_ibfk_2">
+          <End Role="game" Type="Self.game" Multiplicity="0..1" />
+          <End Role="turn" Type="Self.turn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="game">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="turn">
+              <PropertyRef Name="Game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="bowlingModelStoreContainer">
+          <EntitySet Name="game" EntityType="Self.game" Schema="bowling" store:Type="Tables" />
+          <EntitySet Name="lane" EntityType="Self.lane" Schema="bowling" store:Type="Tables" />
+          <EntitySet Name="player" EntityType="Self.player" Schema="bowling" store:Type="Tables" />
+          <EntitySet Name="staff" EntityType="Self.staff" Schema="bowling" store:Type="Tables" />
+          <EntitySet Name="throw" EntityType="Self.throw" Schema="bowling" store:Type="Tables" />
+          <EntitySet Name="turn" EntityType="Self.turn" Schema="bowling" store:Type="Tables" />
+          <AssociationSet Name="game_ibfk_1" Association="Self.game_ibfk_1">
+            <End Role="lane" EntitySet="lane" />
+            <End Role="game" EntitySet="game" />
+          </AssociationSet>
+          <AssociationSet Name="player_ibfk_1" Association="Self.player_ibfk_1">
+            <End Role="game" EntitySet="game" />
+            <End Role="player" EntitySet="player" />
+          </AssociationSet>
+          <AssociationSet Name="throw_ibfk_1" Association="Self.throw_ibfk_1">
+            <End Role="turn" EntitySet="turn" />
+            <End Role="throw" EntitySet="throw" />
+          </AssociationSet>
+          <AssociationSet Name="turn_ibfk_1" Association="Self.turn_ibfk_1">
+            <End Role="player" EntitySet="player" />
+            <End Role="turn" EntitySet="turn" />
+          </AssociationSet>
+          <AssociationSet Name="turn_ibfk_2" Association="Self.turn_ibfk_2">
+            <End Role="game" EntitySet="game" />
+            <End Role="turn" EntitySet="turn" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="bowlingModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="bowlingEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="games" EntityType="bowlingModel.game" />
+          <EntitySet Name="lanes" EntityType="bowlingModel.lane" />
+          <EntitySet Name="players" EntityType="bowlingModel.player" />
+          <EntitySet Name="throws" EntityType="bowlingModel.throw" />
+          <EntitySet Name="turns" EntityType="bowlingModel.turn" />
+          <AssociationSet Name="game_ibfk_1" Association="bowlingModel.game_ibfk_1">
+            <End Role="lane" EntitySet="lanes" />
+            <End Role="game" EntitySet="games" />
+          </AssociationSet>
+          <AssociationSet Name="player_ibfk_1" Association="bowlingModel.player_ibfk_1">
+            <End Role="game" EntitySet="games" />
+            <End Role="player" EntitySet="players" />
+          </AssociationSet>
+          <AssociationSet Name="turn_ibfk_2" Association="bowlingModel.turn_ibfk_2">
+            <End Role="game" EntitySet="games" />
+            <End Role="turn" EntitySet="turns" />
+          </AssociationSet>
+          <AssociationSet Name="turn_ibfk_1" Association="bowlingModel.turn_ibfk_1">
+            <End Role="player" EntitySet="players" />
+            <End Role="turn" EntitySet="turns" />
+          </AssociationSet>
+          <AssociationSet Name="throw_ibfk_1" Association="bowlingModel.throw_ibfk_1">
+            <End Role="turn" EntitySet="turns" />
+            <End Role="throw" EntitySet="throws" />
+          </AssociationSet>
+          <EntitySet Name="staffs" EntityType="bowlingModel.staff" />
+        </EntityContainer>
+        <EntityType Name="game">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Lane_id" Type="Int32" />
+          <Property Name="State" Type="String" MaxLength="65532" Unicode="false" FixedLength="false" />
+          <Property Name="Created_at" Type="DateTime" />
+          <NavigationProperty Name="lane" Relationship="bowlingModel.game_ibfk_1" FromRole="game" ToRole="lane" />
+          <NavigationProperty Name="players" Relationship="bowlingModel.player_ibfk_1" FromRole="game" ToRole="player" />
+          <NavigationProperty Name="turns" Relationship="bowlingModel.turn_ibfk_2" FromRole="game" ToRole="turn" />
+        </EntityType>
+        <EntityType Name="lane">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="State" Type="String" MaxLength="65532" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="games" Relationship="bowlingModel.game_ibfk_1" FromRole="lane" ToRole="game" />
+        </EntityType>
+        <EntityType Name="player">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Game_id" Type="Int32" />
+          <Property Name="Pseudo" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="Password" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="game" Relationship="bowlingModel.player_ibfk_1" FromRole="player" ToRole="game" />
+          <NavigationProperty Name="turns" Relationship="bowlingModel.turn_ibfk_1" FromRole="player" ToRole="turn" />
+        </EntityType>
+        <EntityType Name="throw">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Turn_id" Type="Int32" />
+          <Property Name="Fallen_skittles" Type="Int32" />
+          <Property Name="number" Type="Int32" />
+          <NavigationProperty Name="turn" Relationship="bowlingModel.throw_ibfk_1" FromRole="throw" ToRole="turn" />
+        </EntityType>
+        <EntityType Name="turn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Player_id" Type="Int32" />
+          <Property Name="Game_id" Type="Int32" />
+          <Property Name="Created_at" Type="DateTime" />
+          <Property Name="Score" Type="Int32" />
+          <NavigationProperty Name="game" Relationship="bowlingModel.turn_ibfk_2" FromRole="turn" ToRole="game" />
+          <NavigationProperty Name="player" Relationship="bowlingModel.turn_ibfk_1" FromRole="turn" ToRole="player" />
+          <NavigationProperty Name="throws" Relationship="bowlingModel.throw_ibfk_1" FromRole="turn" ToRole="throw" />
+        </EntityType>
+        <Association Name="game_ibfk_1">
+          <End Role="lane" Type="bowlingModel.lane" Multiplicity="0..1" />
+          <End Role="game" Type="bowlingModel.game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lane">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="game">
+              <PropertyRef Name="Lane_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="player_ibfk_1">
+          <End Role="game" Type="bowlingModel.game" Multiplicity="0..1" />
+          <End Role="player" Type="bowlingModel.player" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="game">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="player">
+              <PropertyRef Name="Game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="turn_ibfk_2">
+          <End Role="game" Type="bowlingModel.game" Multiplicity="0..1" />
+          <End Role="turn" Type="bowlingModel.turn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="game">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="turn">
+              <PropertyRef Name="Game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="turn_ibfk_1">
+          <End Role="player" Type="bowlingModel.player" Multiplicity="0..1" />
+          <End Role="turn" Type="bowlingModel.turn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="player">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="turn">
+              <PropertyRef Name="Player_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="throw_ibfk_1">
+          <End Role="turn" Type="bowlingModel.turn" Multiplicity="0..1" />
+          <End Role="throw" Type="bowlingModel.throw" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="turn">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="throw">
+              <PropertyRef Name="Turn_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="staff">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Pseudo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="bowlingModelStoreContainer" CdmEntityContainer="bowlingEntities">
+          <EntitySetMapping Name="games">
+            <EntityTypeMapping TypeName="bowlingModel.game">
+              <MappingFragment StoreEntitySet="game">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Lane_id" ColumnName="Lane_id" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Created_at" ColumnName="Created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lanes">
+            <EntityTypeMapping TypeName="bowlingModel.lane">
+              <MappingFragment StoreEntitySet="lane">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="State" ColumnName="State" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="players">
+            <EntityTypeMapping TypeName="bowlingModel.player">
+              <MappingFragment StoreEntitySet="player">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Game_id" ColumnName="Game_id" />
+                <ScalarProperty Name="Pseudo" ColumnName="Pseudo" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="throws">
+            <EntityTypeMapping TypeName="bowlingModel.throw">
+              <MappingFragment StoreEntitySet="throw">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Turn_id" ColumnName="Turn_id" />
+                <ScalarProperty Name="Fallen_skittles" ColumnName="Fallen_skittles" />
+                <ScalarProperty Name="number" ColumnName="number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="turns">
+            <EntityTypeMapping TypeName="bowlingModel.turn">
+              <MappingFragment StoreEntitySet="turn">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Player_id" ColumnName="Player_id" />
+                <ScalarProperty Name="Game_id" ColumnName="Game_id" />
+                <ScalarProperty Name="Created_at" ColumnName="Created_at" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="staffs">
+            <EntityTypeMapping TypeName="bowlingModel.staff">
+              <MappingFragment StoreEntitySet="staff">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Pseudo" ColumnName="Pseudo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
