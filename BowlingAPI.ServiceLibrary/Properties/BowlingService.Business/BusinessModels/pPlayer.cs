@@ -64,15 +64,5 @@ namespace BowlingService.Business
                 }
             }             
         }
-
-        public List<turn> getTurns()
-        {
-            var turns = new Repository<turn>();
-            List<turn> list = (from t in turns.GetAll()
-                               where t.Player_id == this.Id
-                               select t).ToList();
-
-            return list;
-        }
     }
 }

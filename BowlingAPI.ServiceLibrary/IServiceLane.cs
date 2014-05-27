@@ -27,5 +27,9 @@ namespace BowlingAPI.ServiceLibrary
         [WebGet(UriTemplate = "")]
         [OperationContract]
         List<lane> findAll();
+
+        [WebInvoke(Method = "PUT", UriTemplate = "{id}/state")]
+        [OperationContract]
+        void updateState(string id, string state);
     }
 }

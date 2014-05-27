@@ -9,16 +9,33 @@ namespace BowlingService.Business
 {
     public partial class game
     {
+        public List<player> getPlayers()
+        {
+            var players = new Repository<player>();
+            List<player> list = (from p in players.GetAll()
+                                 where p.Game_id == this.Id
+                                 select p).ToList();
+            return list;
+        }
+
+        public lane getLane()
+        {
+            var lanes = new Repository<lane>();
+
+            lane l = (from la in lanes.GetAll()
+                      where la.Id == this.Lane_id
+                      select la).SingleOrDefault();
+
+            return l;
+        }
+
         public void assignToLane()
         {
             using (var db = new bowlingEntities())
             {
                 lane lane = (from l in db.lanes
                              where l.State == "available"
-                             select l).SingleOrDefault();
-
-                db.games.Attach(this);
-                db.Entry(this).State = EntityState.Modified;
+                             select l).First();
 
                 if (lane != null)
                 {
@@ -28,8 +45,6 @@ namespace BowlingService.Business
                 {
                     this.assignReservation();
                 }
-
-                db.SaveChanges();
             }
         }
 
@@ -37,19 +52,23 @@ namespace BowlingService.Business
         {
             using (bowlingEntities db = new bowlingEntities())
             {
-                lane lane = (from l in db.lanes
-                             join g in db.games on l.Id equals g.Lane_id
-                             where g.State != "finished"
-                             select l).SingleOrDefault();
+                List<int> lane_ids = (from l in db.lanes
+                                      select l.Id).ToList();
 
-                db.games.Attach(this);
-                db.Entry(this).State = EntityState.Modified;
+                Random rng = new Random();
+                int n = lane_ids.Count;
+                while (n > 1)
+                {
+                    n--;
+                    int k = rng.Next(n + 1);
+                    int value = lane_ids[k];
+                    lane_ids[k] = lane_ids[n];
+                    lane_ids[n] = value;
+                }
 
-                if (lane != null)
-                    this.Lane_id = lane.Id;
-                else
-                    this.Lane_id = (from l in db.lanes select l).SingleOrDefault().Id;
+                this.Lane_id = lane_ids.First();
             }
         }
+
     }
 }

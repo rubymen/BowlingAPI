@@ -12,16 +12,32 @@ namespace BowlingAPI.ServiceLibrary
     [ServiceContract]
     public interface IServiceGame
     {
-        [WebInvoke(Method = "POST", UriTemplate = "lane")]
+        [WebInvoke(Method = "POST", UriTemplate = "/{id}/assignlane")]
         [OperationContract]
-        void assignToLane(game g);
+        void assignToLane(string id);
+
+        [WebInvoke(Method = "POST", UriTemplate = "new")]
+        [OperationContract]
+        game createGame();
+
+        [WebGet(UriTemplate = "recents")]
+        [OperationContract]
+        List<game> findAllfrom24H();
 
         [WebGet(UriTemplate = "{id}")]
         [OperationContract]
         game find(string id);
 
-        [WebGet(UriTemplate = "")]
+        [WebGet(UriTemplate = "pages/{number}?filter={filter}&param={param}")]
         [OperationContract]
-        List<game> findAll();
+        List<game> findAll(string number, string filter = "", string param = "");
+
+        [WebInvoke(Method = "POST", UriTemplate = "{id}/player")]
+        [OperationContract]
+        void addPlayer(string id, player p);
+
+        [WebInvoke(Method = "PUT", UriTemplate = "{id}/state")]
+        [OperationContract]
+        void updateState(string id, string state);
     }
 }

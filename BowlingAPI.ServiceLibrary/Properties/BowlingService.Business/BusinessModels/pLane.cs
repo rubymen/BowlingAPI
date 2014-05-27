@@ -23,13 +23,5 @@ namespace BowlingService.Business
                     return null;
             }
         }
-
-        public List<game> getGames()
-        {
-            var games = new Repository<game>();
-            List<game> ga = games.FindBy(g => g.Lane_id == this.Id).ToList();
-
-            return ga;
-        }
     }
 }

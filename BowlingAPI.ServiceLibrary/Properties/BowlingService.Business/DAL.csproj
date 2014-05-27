@@ -69,7 +69,6 @@
     <Compile Include="BusinessModels\pLane.cs" />
     <Compile Include="BusinessModels\pPlayer.cs" />
     <Compile Include="BusinessModels\pStaff.cs" />
-    <Compile Include="BusinessModels\pTurn.cs" />
     <Compile Include="BusinessModels\Utils.cs" />
     <Compile Include="game.cs">
       <DependentUpon>BowlingModels.tt</DependentUpon>

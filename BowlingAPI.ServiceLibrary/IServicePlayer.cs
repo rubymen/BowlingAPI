@@ -14,11 +14,11 @@ namespace BowlingAPI.ServiceLibrary
     {
         [WebInvoke(Method = "POST", UriTemplate = "game/create")]
         [OperationContract]
-        game createGame(player p);
+        game createGame(List<player> players);
 
-        [WebInvoke(Method = "POST", UriTemplate = "create", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        [WebInvoke(Method = "POST", UriTemplate = "game/{gId}/add", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         [OperationContract]
-        void addPlayer(player currentPlayer, player p);
+        void addPlayer(player p, string gId);
 
         [WebInvoke(Method = "DELETE", UriTemplate = "{id}")]
         [OperationContract]
@@ -31,5 +31,12 @@ namespace BowlingAPI.ServiceLibrary
         [WebGet(UriTemplate = "")]
         [OperationContract]
         List<player> findAll();
+
+        [OperationContract]
+        game findGame(string id);
+
+        [WebInvoke(Method = "PUT", UriTemplate = "players")]
+        [OperationContract]
+        void updatePlayer(player p);
     }
 }
