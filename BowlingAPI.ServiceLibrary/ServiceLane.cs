@@ -23,17 +23,21 @@ namespace BowlingAPI.ServiceLibrary
             var lanes = new Repository<lane>();
             var games = new Repository<game>();
             lane l = lanes.FindBy(x => x.Id == idl).Single();
-            game g = games.GetAll().Where(x => x.Lane_id == l.Id && x.State == "in progress").SingleOrDefault();
-            g.players = g.getPlayers();
-            g.lane = g.getLane();
-
-            foreach (player p in g.players)
+            game g = new game();
+            g = games.GetAll().Where(x => x.Lane_id == l.Id && x.State == "in progress").SingleOrDefault();
+            if (g != null)
             {
-                p.turns = p.getTurns();
+                g.players = g.getPlayers();
+                g.lane = g.getLane();
 
-                foreach (turn t in p.turns)
+                foreach (player p in g.players)
                 {
-                    t.throws = t.GetThrows();
+                    p.turns = p.getTurns();
+
+                    foreach (turn t in p.turns)
+                    {
+                        t.throws = t.GetThrows();
+                    }
                 }
             }
             return g;
@@ -67,7 +71,7 @@ namespace BowlingAPI.ServiceLibrary
         public List<lane> findAll()
         {
             var lanes = new Repository<lane>();
-            List<lane> lst = lanes.GetAll().ToList();
+            List<lane> lst = lanes.GetAll().ToList<lane>();
             foreach (lane l in lst)
             {
                 l.games = l.getGames();

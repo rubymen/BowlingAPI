@@ -12,9 +12,8 @@ namespace BowlingAPI.ServiceLibrary
     [ServiceContract]
     public interface IServiceGame
     {
-        [WebInvoke(Method = "POST", UriTemplate = "/{id}/assignlane")]
         [OperationContract]
-        void assignToLane(string id);
+        void assignToLane(int id);
 
         [WebInvoke(Method = "POST", UriTemplate = "new")]
         [OperationContract]

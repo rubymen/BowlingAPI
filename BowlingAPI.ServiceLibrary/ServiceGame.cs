@@ -11,12 +11,12 @@ namespace BowlingAPI.ServiceLibrary
 {
     public class ServiceGame : IServiceGame
     {
-        public void assignToLane(string id)
+        public void assignToLane(int id)
         {
             var lanes = new Repository<lane>();
             var games = new Repository<game>();
 
-            int g_id = int.Parse(id);
+            int g_id = id;
 
             lane lane = (from l in lanes.GetAll()
                          where l.State == "available"
@@ -28,27 +28,17 @@ namespace BowlingAPI.ServiceLibrary
             {
                 lane.State = "unavailable";
                 g.lane = lane;
+                games.Save();
             }
             else
             {
-                lane la = (from l in lanes.GetAll()
-                             join ga in games.GetAll() on l.Id equals ga.Lane_id
-                             where ga.State != "finished"
-                             select l).SingleOrDefault();
-
-                if (la != null)
-                {
-                    lane.State = "unavailable";
-                    g.Lane_id = la.Id;
-                }
-                else
-                {
-                    lane lan = (from l in lanes.GetAll() select l).SingleOrDefault();
-                    lan.State = "unavailable";
-                    g.Lane_id = lan.Id;
-                }
+                Random random = new Random();
+                int randomLane = random.Next(1, 18);
+                lane l = lanes.FindBy(x => x.Id == randomLane).Single();
+                l.State = "available";
+                g.Lane_id = l.Id;
+                games.Save();
             }
-            games.Save();
         }
 
         
@@ -187,8 +177,24 @@ namespace BowlingAPI.ServiceLibrary
             int idGame = int.Parse(id);
 
             var games = new Repository<game>();
+            
             game g = games.FindBy(x => x.Id == idGame).SingleOrDefault();
             g.State = state;
+
+            if (state == "in progress")
+            {
+                var lanes = new Repository<lane>();
+                lane l = lanes.FindBy(x => x.Id == g.Lane_id).Single();
+                l.State = "unavailable";
+                lanes.Save();
+            }
+            else if (state == "canceled" || state == "finished")
+            {
+                var lanes = new Repository<lane>();
+                lane l = lanes.FindBy(x => x.Id == g.Lane_id).Single();
+                l.State = "available";
+                lanes.Save();
+            }
             games.Save();
         }
     }

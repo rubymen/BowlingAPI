@@ -45,6 +45,8 @@ namespace BowlingService.Business
                 {
                     this.assignReservation();
                 }
+
+                db.SaveChanges();
             }
         }
 
@@ -67,6 +69,8 @@ namespace BowlingService.Business
                 }
 
                 this.Lane_id = lane_ids.First();
+
+                db.SaveChanges();
             }
         }
 

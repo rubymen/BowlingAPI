@@ -65,7 +65,20 @@ namespace BowlingAPI.ServiceLibrary
         {
             int idG = int.Parse(id);
             var games = new Repository<game>();
-            return games.FindBy(g => g.Id == idG).Single();
+            game ga = games.FindBy(g => g.Id == idG).Single();
+            ga.lane = ga.getLane();
+            ga.players = ga.getPlayers();
+
+            foreach (player p in ga.players)
+            {
+                p.turns = p.getTurns();
+
+                foreach (turn t in p.turns)
+                {
+                    t.throws = t.GetThrows();
+                }
+            }
+            return ga;
         }
 
         public void updatePlayer(player p)
